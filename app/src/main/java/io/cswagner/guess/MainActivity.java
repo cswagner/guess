@@ -1,6 +1,9 @@
 package io.cswagner.guess;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +16,8 @@ import static android.view.View.VISIBLE;
 
 @SuppressLint("SetTextI18n")
 public class MainActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPreferences;
 
     private TextView textView;
     private EditText inputTextView;
@@ -27,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        sharedPreferences = getSharedPreferences("history", Context.MODE_PRIVATE);
 
         textView = findViewById(R.id.main_text);
         textView.setText("I'm thinking of a number between 1 and 100");
@@ -52,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 } else if (guess < num) {
                     textView.setText(guess + " is too low. Try again");
                 } else {
+                    int gamesPlayed = sharedPreferences.getInt("count", 0);
+                    sharedPreferences.edit().putInt("count", gamesPlayed + 1).apply();
+
                     textView.setText("My number was " + guess
                             + ". You got it in " + guesses + (guesses > 1 ? " guesses." : " guess."));
                     inputTextView.setVisibility(GONE);
@@ -83,6 +93,12 @@ public class MainActivity extends AppCompatActivity {
 
         historyButton = findViewById(R.id.main_history_button);
         historyButton.setVisibility(GONE);
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, HistoryActivity.class));
+            }
+        });
     }
 
     private int randomInt() {

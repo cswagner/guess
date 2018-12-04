@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Guess</string>
+    <string name="history_average_label">Average Guesses</string>
+    <string name="history_count_label">Games Played</string>
     <string name="main_history_button_label">Past Results</string>
     <string name="main_input_button_label">Submit</string>
     <string name="main_replay_button_label">Play Again</string>
